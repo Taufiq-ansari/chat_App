@@ -96,7 +96,7 @@ class _ChatPageState extends State<ChatPage> {
         builder: (context, AsyncSnapshot snapshot) {
           return snapshot.hasData
               ? ListView.builder(
-                  padding: EdgeInsets.only(bottom: 90.0, top: 90.0),
+                  padding: EdgeInsets.only(bottom: 10.0, top: 90.0),
                   itemCount: snapshot.data.docs.length,
                   reverse: true,
                   itemBuilder: (context, index) {
@@ -152,76 +152,83 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Color(0xff0E2954),
-      body: Container(
-        padding: EdgeInsets.only(top: 20.0),
-        child: Stack(
-          children: [
-            Container(
-                margin: EdgeInsets.only(top: 50.0),
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height / 1.09,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30))),
-                child: chatMessage()),
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => HomePage()));
-                    },
-                    child: Icon(Icons.arrow_back_ios_new_outlined,
-                        color: Color.fromARGB(255, 122, 164, 203)),
-                  ),
-                  SizedBox(
-                    width: 100.0,
-                  ),
-                  Text(
-                    widget.name,
-                    style: TextStyle(
-                        color: Color(0xffC5DFF8),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400),
-                  ),
-                ],
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        backgroundColor: Color(0xff0E2954),
+        body: Container(
+          padding: EdgeInsets.only(top: 20.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomePage()));
+                      },
+                      child: Icon(Icons.arrow_back_ios_new_outlined,
+                          color: Color.fromARGB(255, 122, 164, 203)),
+                    ),
+                    SizedBox(
+                      width: 100.0,
+                    ),
+                    Text(
+                      widget.name,
+                      style: TextStyle(
+                          color: Color(0xffC5DFF8),
+                          fontSize: 20,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: Material(
-                elevation: 5.0,
-                borderRadius: BorderRadius.circular(40.0),
+              Expanded(
                 child: Container(
-                  margin:
-                      EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
-                  padding: EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(60.0)),
-                  child: TextField(
-                    controller: messagecontroller,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "type here...",
-                        hintStyle: TextStyle(color: Colors.black45),
-                        suffixIcon: GestureDetector(
-                            onTap: () {
-                              addMessage(true);
-                            },
-                            child: Icon(Icons.send_rounded))),
+                    clipBehavior: Clip.hardEdge,
+                    margin: EdgeInsets.only(top: 50.0),
+                    // width: MediaQuery.of(context).size.width,
+                    // height: MediaQuery.of(context).size.height / 1.09,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30))),
+                    child: chatMessage()),
+              ),
+              Container(
+                alignment: Alignment.bottomCenter,
+                child: Material(
+                  elevation: 5.0,
+                  // borderRadius: BorderRadius.circular(40.0),
+                  child: Container(
+                    margin:
+                        EdgeInsets.only(left: 20.0, right: 20.0, bottom: 10.0),
+                    padding: EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(60.0)),
+                    child: TextField(
+                      controller: messagecontroller,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "type here...",
+                          hintStyle: TextStyle(color: Colors.black45),
+                          suffixIcon: GestureDetector(
+                              onTap: () {
+                                addMessage(true);
+                              },
+                              child: Icon(Icons.send_rounded))),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

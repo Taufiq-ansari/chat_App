@@ -45,12 +45,12 @@ class _HomePageState extends State<HomePage> {
                   itemCount: snapshot.data.docs.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    DocumentSnapshot ds = snapshot.data.doc.length;
+                    DocumentSnapshot ds = snapshot.data.docs[index];
                     return ChatRoomListTile(
                         chatRoomId: ds.id,
                         lastMessage: ds["lastMessage"],
                         myUsername: myUserName!,
-                        time: ds["lastMessageSendts"]);
+                        time: ds["lastMessageTs"]);
                   })
               : Center(
                   child: CircularProgressIndicator(),
@@ -143,22 +143,6 @@ class _HomePageState extends State<HomePage> {
           return false;
         },
         child: Scaffold(
-            appBar: AppBar(
-              actions: [
-                IconButton(
-                  onPressed: () async {
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SignIn(),
-                        ),
-                        (route) => false);
-                  },
-                  icon: Icon(Icons.logout),
-                )
-              ],
-            ),
             backgroundColor: Color(0xff0E2954),
             body: Container(
                 child: Column(children: [
@@ -194,33 +178,87 @@ class _HomePageState extends State<HomePage> {
                                 fontSize: 30,
                                 fontWeight: FontWeight.w400),
                           ),
-                    GestureDetector(
-                      onTap: () {
-                        search = true;
-                        setState(() {});
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Color(0xff365486),
-                            borderRadius: BorderRadius.circular(20.0)),
-                        child: search
-                            ? GestureDetector(
-                                onTap: () {
-                                  search = false;
-                                  setState(() {});
-                                },
-                                child: Icon(
-                                  Icons.close,
-                                  color: Color(0xffC5DFF8),
-                                  size: 30,
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            search = true;
+                            setState(() {});
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                color: Color(0xff365486),
+                                borderRadius: BorderRadius.circular(20.0)),
+                            child: search
+                                ? GestureDetector(
+                                    onTap: () {
+                                      search = false;
+                                      setState(() {});
+                                    },
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Color(0xffC5DFF8),
+                                      size: 30,
+                                    ),
+                                  )
+                                : Icon(
+                                    Icons.search,
+                                    color: Color(0xffC5DFF8),
+                                    size: 30,
+                                  ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        if (!search)
+                          GestureDetector(
+                            onTap: () async {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  contentPadding: EdgeInsets.only(
+                                      top: 20, left: 15, right: 15),
+                                  content:
+                                      Text('Are you sure, You want to logout?'),
+                                  actionsPadding: EdgeInsets.only(
+                                      top: 20, left: 15, right: 15, bottom: 15),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () async {
+                                          await FirebaseAuth.instance.signOut();
+                                          Navigator.pop(context);
+                                          Navigator.pushAndRemoveUntil(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => SignIn(),
+                                              ),
+                                              (route) => false);
+                                        },
+                                        child: Text('Yes')),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text('No'))
+                                  ],
                                 ),
-                              )
-                            : Icon(
-                                Icons.search,
-                                color: Color(0xffC5DFF8),
-                                size: 30,
+                              );
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color: Color(0xff365486),
+                                  borderRadius: BorderRadius.circular(20.0)),
+                              child: Icon(
+                                Icons.logout,
+                                color: Colors.white,
+                                size: 28,
                               ),
-                      ),
+                            ),
+                          ),
+                      ],
                     )
                   ],
                 ),
@@ -556,6 +594,15 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
     super.initState();
   }
 
+  getChatRoomIdbyUsername(String a, String b) {
+    if (a.codeUnitAt(0) > b.codeUnitAt(1)) {
+      return "$b\_$a";
+    }
+    {
+      return "$a\_$b";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -577,32 +624,53 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
           SizedBox(
             width: 20.0,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 10.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    username,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 17.0,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              Text(
-                widget.lastMessage,
-                style: TextStyle(
-                    color: Colors.black45,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w500),
-              ),
-            ],
+          GestureDetector(
+            onTap: () async {
+              String? myUserName = await SharedpreHelper().getUserName();
+
+              String chatRoomId =
+                  getChatRoomIdbyUsername(myUserName!, username);
+              Map<String, dynamic> chatRoomInfoMap = <String, dynamic>{
+                "users": [myUserName, username],
+              };
+              await DatabaseMethods()
+                  .creatChatRoom(chatRoomId, chatRoomInfoMap);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ChatPage(
+                          chatroom: chatRoomId,
+                          name: name,
+                          profileurl: profilePicUrl,
+                          username: username)));
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 10.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      username,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+                Text(
+                  widget.lastMessage,
+                  style: TextStyle(
+                      color: Colors.black45,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
           ),
           Spacer(),
           Text(

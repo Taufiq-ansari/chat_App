@@ -77,9 +77,10 @@ class DatabaseMethods {
   Future<Stream<QuerySnapshot>> getChatRooms() async {
     String? myUsername = await SharedpreHelper().getUserName();
     return FirebaseFirestore.instance
-        .collection("chatroom")
+        .collection("chatrooms")
         .orderBy("time", descending: true)
-        .where("user", arrayContains: myUsername!.toUpperCase())
+        .where("users", arrayContains: myUsername!.toUpperCase())
         .snapshots();
   }
+  
 }
