@@ -1,10 +1,12 @@
 import 'package:catalog_1/pages/home.dart';
+import 'package:catalog_1/pages/sign-up.dart';
 import 'package:catalog_1/service/database.dart';
 import 'package:catalog_1/service/shared_pref.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -263,9 +265,15 @@ class _SignInState extends State<SignIn> {
                       "Dont have an account?",
                       style: TextStyle(color: Colors.black),
                     ),
-                    Text(
-                      "Sign Up Now?",
-                      style: TextStyle(color: Color(0xff3887BE)),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => SignUp()));
+                      },
+                      child: Text(
+                        "Sign Up Now?",
+                        style: TextStyle(color: Color(0xff3887BE)),
+                      ),
                     )
                   ],
                 )
