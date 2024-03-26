@@ -43,20 +43,20 @@ class _SignInState extends State<SignIn> {
       await SharedpreHelper().saveUserPic(pic);
 
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+          context, MaterialPageRoute(builder: (context) => HomePage()),);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Colors.orange,
             content: Text("no user found for that email",
-                style: TextStyle(fontSize: 18.0, color: Colors.black))));
+                style: TextStyle(fontSize: 18.0, color: Colors.black),),),);
       } else if (e.code == "wrong-password") {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             "wrong password",
             style: TextStyle(fontSize: 18.0, color: Colors.black),
           ),
-        ));
+        ),);
       } else {
         print(e);
       }
@@ -80,10 +80,10 @@ class _SignInState extends State<SignIn> {
                 gradient: LinearGradient(
                     colors: [Color(0xff3887BE), Color(0xff1B4242)],
                     begin: Alignment.topLeft,
-                    end: Alignment.bottomRight),
+                    end: Alignment.bottomRight,),
                 borderRadius: BorderRadius.vertical(
                     bottom: Radius.elliptical(
-                        MediaQuery.of(context).size.width, 100.0))),
+                        MediaQuery.of(context).size.width, 100.0,),),),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 70),
@@ -95,16 +95,16 @@ class _SignInState extends State<SignIn> {
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                )),
+                      fontWeight: FontWeight.bold,),
+                ),),
                 Center(
                     child: Text(
                   "welcome to the Login-page",
                   style: TextStyle(
                       color: Color(0xff7FC7D9),
                       fontSize: 15,
-                      fontWeight: FontWeight.w400),
-                )),
+                      fontWeight: FontWeight.w400,),
+                ),),
                 SizedBox(height: 20.0),
                 Container(
                   margin:
@@ -119,7 +119,7 @@ class _SignInState extends State<SignIn> {
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(10)),
+                            borderRadius: BorderRadius.circular(10),),
                         child: Form(
                           key: _formkey,
                           child: Column(
@@ -129,7 +129,7 @@ class _SignInState extends State<SignIn> {
                                   style: TextStyle(
                                       color: Colors.black38,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15.0)),
+                                      fontSize: 15.0,),),
                               Stack(children: [
                                 Container(
                                   height: 50.0,
@@ -139,7 +139,7 @@ class _SignInState extends State<SignIn> {
                                         width: 1.5,
                                         color: Colors.black38,
                                       ),
-                                      borderRadius: BorderRadius.circular(10)),
+                                      borderRadius: BorderRadius.circular(10),),
                                 ),
                                 TextFormField(
                                   controller: usermailcontroller,
@@ -154,14 +154,14 @@ class _SignInState extends State<SignIn> {
                                       prefixIcon: Icon(
                                         CupertinoIcons.mail,
                                         color: Color(0xff3887BE),
-                                      )),
+                                      ),),
                                 ),
-                              ]),
+                              ],),
                               Text("Password",
                                   style: TextStyle(
                                       color: Colors.black38,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15.0)),
+                                      fontSize: 15.0,),),
                               Stack(
                                 children: [
                                   Container(
@@ -173,7 +173,7 @@ class _SignInState extends State<SignIn> {
                                           color: Colors.black38,
                                         ),
                                         borderRadius:
-                                            BorderRadius.circular(10)),
+                                            BorderRadius.circular(10),),
                                   ),
                                   TextFormField(
                                     controller: userpasswordcontroller,
@@ -204,7 +204,7 @@ class _SignInState extends State<SignIn> {
                                   style: TextStyle(
                                       color: Colors.black38,
                                       fontSize: 15,
-                                      fontWeight: FontWeight.bold),
+                                      fontWeight: FontWeight.bold,),
                                 ),
                               ),
                               SizedBox(
@@ -242,17 +242,17 @@ class _SignInState extends State<SignIn> {
                                             gradient: LinearGradient(
                                               colors: [
                                                 Color(0xff3887BE),
-                                                Color(0xff1B4242)
+                                                Color(0xff1B4242),
                                               ],
-                                            )),
+                                            ),),
                                       ),
                                     ),
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
-                        )),
+                        ),),
                   ),
                 ),
                 SizedBox(
@@ -268,20 +268,20 @@ class _SignInState extends State<SignIn> {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => SignUp()));
+                            MaterialPageRoute(builder: (context) => SignUp()),);
                       },
                       child: Text(
                         "Sign Up Now?",
                         style: TextStyle(color: Color(0xff3887BE)),
                       ),
-                    )
+                    ),
                   ],
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
-      )),
+      ),),
     );
   }
 }

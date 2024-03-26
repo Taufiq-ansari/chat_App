@@ -40,8 +40,11 @@ class DatabaseMethods {
     }
   }
 
-  Future addMessage(String chatRoomId, String messageId,
-      Map<String, dynamic> messageInfoMap) {
+  Future addMessage(
+    String chatRoomId,
+    String messageId,
+    Map<String, dynamic> messageInfoMap,
+  ) {
     return FirebaseFirestore.instance
         .collection("chatrooms")
         .doc(chatRoomId)
@@ -51,7 +54,9 @@ class DatabaseMethods {
   }
 
   updateLastMessageSend(
-      String chatRoomId, Map<String, dynamic> lastMessageInfoMap) {
+    String chatRoomId,
+    Map<String, dynamic> lastMessageInfoMap,
+  ) {
     return FirebaseFirestore.instance
         .collection("chatrooms")
         .doc(chatRoomId)
@@ -82,5 +87,4 @@ class DatabaseMethods {
         .where("users", arrayContains: myUsername!.toUpperCase())
         .snapshots();
   }
-  
 }
