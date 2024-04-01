@@ -383,7 +383,7 @@ class _SignUpState extends State<SignUp> {
                                       style: TextStyle(color: Colors.black),
                                     ),
                                     Text(
-                                      "Sign Up Now!  ",
+                                      "Sign in Now!  ",
                                       style:
                                           TextStyle(color: Color(0xff3887BE)),
                                     ),

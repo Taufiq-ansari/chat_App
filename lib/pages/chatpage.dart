@@ -169,7 +169,7 @@ class _ChatPageState extends State<ChatPage> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 10.0),
+                padding: const EdgeInsets.only(left: 10.0, top: 20.0),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -182,12 +182,14 @@ class _ChatPageState extends State<ChatPage> {
                         );
                       },
                       child: Icon(
-                        Icons.arrow_back_ios_new_outlined,
+                        Icons.arrow_back_outlined,
                         color: Color.fromARGB(255, 122, 164, 203),
                       ),
+                      
                     ),
                     SizedBox(
-                      width: 100.0,
+                      height: 10.0,
+                      width: 150.0,
                     ),
                     Text(
                       widget.name,
@@ -203,7 +205,7 @@ class _ChatPageState extends State<ChatPage> {
               Expanded(
                 child: Container(
                   clipBehavior: Clip.hardEdge,
-                  margin: EdgeInsets.only(top: 50.0),
+                  margin: EdgeInsets.only(top: 30.0),
                   // width: MediaQuery.of(context).size.width,
                   // height: MediaQuery.of(context).size.height / 1.09,
                   decoration: BoxDecoration(
