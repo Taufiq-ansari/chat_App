@@ -518,7 +518,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildResultCard(Map<String, dynamic> data) {
-    print(data["Photo"]);
+   
     return GestureDetector(
       onTap: () async {
         search = false;

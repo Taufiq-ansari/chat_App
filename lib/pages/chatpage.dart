@@ -185,7 +185,6 @@ class _ChatPageState extends State<ChatPage> {
                         Icons.arrow_back_outlined,
                         color: Color.fromARGB(255, 122, 164, 203),
                       ),
-                      
                     ),
                     SizedBox(
                       height: 10.0,
