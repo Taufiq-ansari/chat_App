@@ -47,6 +47,8 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   DocumentSnapshot ds = snapshot.data.docs[index];
                   return ChatRoomListTile(
+                    name: ds['receivedUserName'],
+                    profileurl: ds['receivedUserProfile'],
                     chatRoomId: ds.id,
                     lastMessage: ds["lastMessage"],
                     myUsername: myUserName!,
@@ -302,212 +304,33 @@ class _HomePageState extends State<HomePage> {
                       topRight: Radius.circular(20),
                     ),
                   ),
-                  child: Column(
-                    children: [
-                      search
-                          ? isloading
-                              ? Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : searchController.text.trim().isEmpty
-                                  ? Text("search to find contact")
-                                  : tempSearchStore.isEmpty
-                                      ? Text("no contact found ")
-                                      : ListView.builder(
-                                          itemCount: tempSearchStore.length,
-                                          padding: EdgeInsets.only(
-                                            left: 10.0,
-                                            right: 10.0,
-                                          ),
-                                          primary: false,
-                                          shrinkWrap: true,
-                                          itemBuilder: (
-                                            BuildContext context,
-                                            int index,
-                                          ) {
-                                            return buildResultCard(
-                                              tempSearchStore[index],
-                                            );
-                                          },
-                                        )
-                          : ChatRoomList(),
-                      // Column(
-                      //                 children: [
-                      //                   GestureDetector(
-                      //                     onTap: () {},
-                      //                     child: Row(
-                      //                       crossAxisAlignment: CrossAxisAlignment.start,
-                      //                       children: [
-                      //                         ClipRRect(
-                      //                           child: Image.asset(
-                      //                             'assets/boy2.png',
-                      //                             height: 60.0,
-                      //                             width: 60.0,
-                      //                             fit: BoxFit.cover,
-                      //                           ),
-                      //                           borderRadius: BorderRadius.circular(60),
-                      //                         ),
-                      //                         SizedBox(
-                      //                           width: 20.0,
-                      //                         ),
-                      //                         Column(
-                      //                           crossAxisAlignment:
-                      //                               CrossAxisAlignment.start,
-                      //                           children: [
-                      //                             SizedBox(
-                      //                               height: 10.0,
-                      //                             ),
-                      //                             Row(
-                      //                               mainAxisAlignment:
-                      //                                   MainAxisAlignment.spaceBetween,
-                      //                               children: [
-                      //                                 Text(
-                      //                                   'Taufiq Ansari',
-                      //                                   style: TextStyle(
-                      //                                       color: Colors.black,
-                      //                                       fontSize: 17.0,
-                      //                                       fontWeight: FontWeight.w500),
-                      //                                 ),
-                      //                               ],
-                      //                             ),
-                      //                             Text(
-                      //                               'hii whassup..!',
-                      //                               style: TextStyle(
-                      //                                   color: Colors.black45,
-                      //                                   fontSize: 14.0,
-                      //                                   fontWeight: FontWeight.w500),
-                      //                             ),
-                      //                           ],
-                      //                         ),
-                      //                         Spacer(),
-                      //                         Text(
-                      //                           '10:00 PM',
-                      //                           style: TextStyle(
-                      //                               color: Colors.black,
-                      //                               fontSize: 14.0,
-                      //                               fontWeight: FontWeight.w500),
-                      //                         ),
-                      //                       ],
-                      //                     ),
-                      //                   ),
-                      //                   SizedBox(height: 8.0),
-                      //                   Row(
-                      //                     crossAxisAlignment: CrossAxisAlignment.start,
-                      //                     children: [
-                      //                       ClipRRect(
-                      //                         child: Image.asset(
-                      //                           'assets/yash.png',
-                      //                           height: 60.0,
-                      //                           width: 60.0,
-                      //                           fit: BoxFit.cover,
-                      //                         ),
-                      //                         borderRadius: BorderRadius.circular(60),
-                      //                       ),
-                      //                       SizedBox(
-                      //                         width: 20.0,
-                      //                       ),
-                      //                       Column(
-                      //                         crossAxisAlignment:
-                      //                             CrossAxisAlignment.start,
-                      //                         children: [
-                      //                           SizedBox(
-                      //                             height: 10.0,
-                      //                           ),
-                      //                           Row(
-                      //                             mainAxisAlignment:
-                      //                                 MainAxisAlignment.spaceBetween,
-                      //                             children: [
-                      //                               Text(
-                      //                                 'yash singh',
-                      //                                 style: TextStyle(
-                      //                                     color: Colors.black,
-                      //                                     fontSize: 17.0,
-                      //                                     fontWeight: FontWeight.w500),
-                      //                               ),
-                      //                             ],
-                      //                           ),
-                      //                           Text(
-                      //                             'hii whassup..!',
-                      //                             style: TextStyle(
-                      //                                 color: Colors.black45,
-                      //                                 fontSize: 14.0,
-                      //                                 fontWeight: FontWeight.w500),
-                      //                           ),
-                      //                         ],
-                      //                       ),
-                      //                       Spacer(),
-                      //                       Text(
-                      //                         '10:00 PM',
-                      //                         style: TextStyle(
-                      //                             color: Colors.black,
-                      //                             fontSize: 14.0,
-                      //                             fontWeight: FontWeight.w500),
-                      //                       ),
-                      //                     ],
-                      //                   ),
-                      //                   SizedBox(height: 10.0),
-                      //                   Row(
-                      //                     crossAxisAlignment: CrossAxisAlignment.start,
-                      //                     children: [
-                      //                       ClipRRect(
-                      //                         child: Image.asset(
-                      //                           'assets/sanjay.png',
-                      //                           height: 60.0,
-                      //                           width: 60.0,
-                      //                           fit: BoxFit.cover,
-                      //                         ),
-                      //                         borderRadius: BorderRadius.circular(60),
-                      //                       ),
-                      //                       SizedBox(
-                      //                         width: 20.0,
-                      //                       ),
-                      //                       Column(
-                      //                         crossAxisAlignment:
-                      //                             CrossAxisAlignment.start,
-                      //                         children: [
-                      //                           SizedBox(
-                      //                             height: 10.0,
-                      //                           ),
-                      //                           Row(
-                      //                             mainAxisAlignment:
-                      //                                 MainAxisAlignment.spaceBetween,
-                      //                             children: [
-                      //                               Text(
-                      //                                 'sanjay singh',
-                      //                                 style: TextStyle(
-                      //                                     color: Colors.black,
-                      //                                     fontSize: 17.0,
-                      //                                     fontWeight: FontWeight.w500),
-                      //                               ),
-                      //                             ],
-                      //                           ),
-                      //                           Text(
-                      //                             'hii whassup..!',
-                      //                             style: TextStyle(
-                      //                                 color: Colors.black45,
-                      //                                 fontSize: 14.0,
-                      //                                 fontWeight: FontWeight.w500),
-                      //                           ),
-                      //                         ],
-                      //                       ),
-                      //                       Spacer(),
-                      //                       Text(
-                      //                         '10:00 PM',
-                      //                         style: TextStyle(
-                      //                             color: Colors.black,
-                      //                             fontSize: 14.0,
-                      //                             fontWeight: FontWeight.w500),
-                      //                       ),
-                      //                     ],
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // )
-                    ],
-                  ),
+                  child: search
+                      ? isloading
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : searchController.text.trim().isEmpty
+                              ? Center(child: Text("search to find contact"))
+                              : tempSearchStore.isEmpty
+                                  ? Center(child: Text("no contact found "))
+                                  : ListView.builder(
+                                      itemCount: tempSearchStore.length,
+                                      padding: EdgeInsets.only(
+                                        left: 10.0,
+                                        right: 10.0,
+                                      ),
+                                      primary: false,
+                                      shrinkWrap: true,
+                                      itemBuilder: (
+                                        BuildContext context,
+                                        int index,
+                                      ) {
+                                        return buildResultCard(
+                                          tempSearchStore[index],
+                                        );
+                                      },
+                                    )
+                      : ChatRoomList(),
                 ),
               ),
             ],
@@ -518,12 +341,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildResultCard(Map<String, dynamic> data) {
-   
     return GestureDetector(
       onTap: () async {
-        search = false;
-        setState(() {});
-
         String chatRoomId =
             getChatRoomIdbyUsername(myUserName!, data['username']);
         Map<String, dynamic> chatRoomInfoMap = <String, dynamic>{
@@ -599,8 +418,10 @@ class _HomePageState extends State<HomePage> {
 }
 
 class ChatRoomListTile extends StatefulWidget {
-  final String lastMessage, chatRoomId, myUsername, time;
+  final String lastMessage, name, profileurl, chatRoomId, myUsername, time;
   ChatRoomListTile({
+    required this.name,
+    required this.profileurl,
     required this.chatRoomId,
     required this.lastMessage,
     required this.myUsername,
@@ -647,17 +468,15 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          profilePicUrl == ""
-              ? CircularProgressIndicator()
-              : ClipRRect(
-                  child: Image.network(
-                    profilePicUrl,
-                    height: 60.0,
-                    width: 60.0,
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.circular(60),
-                ),
+          ClipRRect(
+            child: Image.network(
+              widget.profileurl,
+              height: 60.0,
+              width: 60.0,
+              fit: BoxFit.cover,
+            ),
+            borderRadius: BorderRadius.circular(60),
+          ),
           SizedBox(
             width: 20.0,
           ),
@@ -694,7 +513,7 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      username,
+                      widget.name,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 17.0,

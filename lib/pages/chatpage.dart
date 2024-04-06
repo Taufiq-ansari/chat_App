@@ -143,6 +143,8 @@ class _ChatPageState extends State<ChatPage> {
           "lastMessageTs": formattedDate,
           "time": FieldValue.serverTimestamp(),
           "lastMessageSendby": myUserName,
+          "receivedUserName": widget.name,
+          "receivedUserProfile": widget.profileurl,
         };
         DatabaseMethods()
             .updateLastMessageSend(chatRoomId!, lastMessageInfoMap);
