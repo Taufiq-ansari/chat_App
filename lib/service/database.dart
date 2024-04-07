@@ -72,6 +72,16 @@ class DatabaseMethods {
         .snapshots();
   }
 
+  Future<void> deleteMessage(
+      {required String chatRoomId, required String docId}) async {
+    return FirebaseFirestore.instance
+        .collection('chatrooms')
+        .doc(chatRoomId)
+        .collection('chats')
+        .doc(docId)
+        .delete();
+  }
+
   Future<QuerySnapshot> getUserInfo(String username) async {
     return await FirebaseFirestore.instance
         .collection("user")

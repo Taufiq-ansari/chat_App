@@ -25,7 +25,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   TextEditingController messagecontroller = new TextEditingController();
   String? myUserName, myProfilePic, myName, myEmail, messageId, chatRoomId;
-  Stream? messageStream;
+  Stream<QuerySnapshot<Object?>>? messageStream;
 
   gettheSharedpre() async {
     myUserName = await SharedpreHelper().getUserName();
@@ -59,33 +59,54 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  Widget chatMessageTile(String message, bool sendbyMe) {
+  Widget chatMessageTile(
+      String message, bool sendbyMe, String id, String lastMessage) {
     return Row(
       mainAxisAlignment:
           sendbyMe ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         Flexible(
-          child: Container(
-            padding: EdgeInsets.all(16),
-            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(24),
-                bottomRight:
-                    sendbyMe ? Radius.circular(0) : Radius.circular(24),
-                topRight: Radius.circular(24),
-                bottomLeft: sendbyMe ? Radius.circular(24) : Radius.circular(0),
+          child: PopupMenuButton(
+            // position: PopupMenuPosition.under,
+            offset: Offset(-20, -55),
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                child: Text('delete'),
+                onTap: () async {
+                  await DatabaseMethods()
+                      .deleteMessage(chatRoomId: chatRoomId!, docId: id);
+                  Map<String, dynamic> lastMessageInfoMap = {
+                    "lastMessage": lastMessage,
+                  };
+                  DatabaseMethods()
+                      .updateLastMessageSend(chatRoomId!, lastMessageInfoMap);
+                },
+              )
+            ],
+
+            child: Container(
+              padding: EdgeInsets.all(16),
+              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(24),
+                  bottomRight:
+                      sendbyMe ? Radius.circular(0) : Radius.circular(24),
+                  topRight: Radius.circular(24),
+                  bottomLeft:
+                      sendbyMe ? Radius.circular(24) : Radius.circular(0),
+                ),
+                color: sendbyMe
+                    ? Color.fromARGB(255, 225, 234, 236)
+                    : Color.fromARGB(255, 225, 234, 236),
               ),
-              color: sendbyMe
-                  ? Color.fromARGB(255, 225, 234, 236)
-                  : Color.fromARGB(255, 225, 234, 236),
-            ),
-            child: Text(
-              message,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500,
+              child: Text(
+                message,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ),
@@ -95,19 +116,28 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget chatMessage() {
-    return StreamBuilder(
+    return StreamBuilder<QuerySnapshot<Object?>>(
       stream: messageStream,
-      builder: (context, AsyncSnapshot snapshot) {
+      builder: (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
         return snapshot.hasData
             ? ListView.builder(
                 padding: EdgeInsets.only(bottom: 10.0, top: 90.0),
-                itemCount: snapshot.data.docs.length,
+                itemCount: snapshot.data?.docs.length,
                 reverse: true,
                 itemBuilder: (context, index) {
-                  DocumentSnapshot ds = snapshot.data.docs[index];
+                  DocumentSnapshot ds = snapshot.data!.docs[index];
+
                   return chatMessageTile(
                     ds["message"],
                     myUserName == ds["sendBy"],
+                    ds.id,
+                    index == snapshot.data!.docs.length - 1
+                        ? snapshot.data!.docs.length <= 1
+                            ? ''
+                            : snapshot.data?.docs.first['message']
+                        : snapshot.data!.docs.length <= 1
+                            ? ''
+                            : snapshot.data?.docs[1]['message'],
                   );
                 },
               )

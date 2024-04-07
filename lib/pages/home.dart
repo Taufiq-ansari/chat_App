@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class HomePage extends StatefulWidget {
@@ -465,84 +466,150 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            child: Image.network(
-              widget.profileurl,
-              height: 60.0,
-              width: 60.0,
-              fit: BoxFit.cover,
-            ),
-            borderRadius: BorderRadius.circular(60),
-          ),
-          SizedBox(
-            width: 20.0,
-          ),
-          GestureDetector(
-            onTap: () async {
-              String? myUserName = await SharedpreHelper().getUserName();
-
-              String chatRoomId =
-                  getChatRoomIdbyUsername(myUserName!, username);
-              Map<String, dynamic> chatRoomInfoMap = <String, dynamic>{
-                "users": [myUserName, username],
-              };
-              await DatabaseMethods()
-                  .creatChatRoom(chatRoomId, chatRoomInfoMap);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ChatPage(
-                    chatroom: chatRoomId,
-                    name: name,
-                    profileurl: profilePicUrl,
-                    username: username,
+      child: GestureDetector(
+        onTap: () {},
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => SimpleDialog(
+                    clipBehavior: Clip.hardEdge,
+                    children: [Image.network(widget.profileurl)],
                   ),
+                );
+              },
+              child: ClipRRect(
+                child: Image.network(
+                  widget.profileurl,
+                  height: 60.0,
+                  width: 60.0,
+                  fit: BoxFit.cover,
                 ),
-              );
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 10.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.name,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 17.0,
-                        fontWeight: FontWeight.w500,
+                borderRadius: BorderRadius.circular(60),
+              ),
+            ),
+            SizedBox(
+              width: 20.0,
+            ),
+            Expanded(
+              child: GestureDetector(
+                onTap: () async {
+                  String? myUserName = await SharedpreHelper().getUserName();
+
+                  String chatRoomId =
+                      getChatRoomIdbyUsername(myUserName!, username);
+                  Map<String, dynamic> chatRoomInfoMap = <String, dynamic>{
+                    "users": [myUserName, username],
+                  };
+                  await DatabaseMethods()
+                      .creatChatRoom(chatRoomId, chatRoomInfoMap);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatPage(
+                        chatroom: chatRoomId,
+                        name: name,
+                        profileurl: profilePicUrl,
+                        username: username,
                       ),
                     ),
-                  ],
-                ),
-                Text(
-                  widget.lastMessage,
-                  style: TextStyle(
-                    color: Colors.black45,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w500,
+                  );
+                },
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      contentPadding: EdgeInsets.only(
+                        top: 20,
+                        left: 15,
+                        right: 15,
+                      ),
+                      content: Text('Are you sure, You want to delete?'),
+                      actionsPadding: EdgeInsets.only(
+                        top: 20,
+                        left: 15,
+                        right: 15,
+                        bottom: 15,
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () async {
+                            String? myUserName =
+                                await SharedpreHelper().getUserName();
+
+                            String chatRoomId =
+                                getChatRoomIdbyUsername(myUserName!, username);
+
+                            FirebaseFirestore.instance
+                                .collection('chatrooms')
+                                .doc(chatRoomId)
+                                .delete();
+                            Navigator.pop(context);
+                          },
+                          child: Text('Yes'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('No'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                child: Container(
+                  color: Colors.transparent,
+                  child: Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                widget.name,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 17.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            widget.lastMessage,
+                            style: TextStyle(
+                              color: Colors.black45,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      Text(
+                        widget.time,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-          Spacer(),
-          Text(
-            widget.time,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 14.0,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
