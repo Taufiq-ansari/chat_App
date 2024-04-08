@@ -107,13 +107,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     SizedBox(height: 20.0),
                     Container(
                       margin: EdgeInsets.symmetric(
-                          vertical: 30.0, horizontal: 30.0),
+                          vertical: 30.0, horizontal: 30.0,),
                       child: Material(
                         elevation: 6.0,
                         borderRadius: BorderRadius.circular(10),
                         child: Container(
                           margin: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 20),
+                              vertical: 20, horizontal: 20,),
                           height: MediaQuery.of(context).size.height / 4,
                           width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
@@ -171,7 +171,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   onTap: () {
                                     if (_formkey.currentState!.validate()) ;
                                     resetPassword(
-                                        email: usermailcontroller.text);
+                                        email: usermailcontroller.text,);
                                   },
                                   child: Center(
                                     child: Container(
@@ -185,7 +185,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                             child: Text(
                                               "Send Email",
                                               style: TextStyle(
-                                                  color: Colors.white),
+                                                  color: Colors.white,),
                                             ),
                                           ),
                                           decoration: BoxDecoration(
@@ -217,7 +217,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       children: [
                         Text(
                           "Remember your password?",
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: Colors.black,),
                         ),
                         GestureDetector(
                           onTap: () {
