@@ -60,11 +60,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget chatMessageTile(
-    String message,
-    bool sendbyMe,
-    String id,
-    String lastMessage,
-  ) {
+      String message, bool sendbyMe, String id, String lastMessage,) {
     return Row(
       mainAxisAlignment:
           sendbyMe ? MainAxisAlignment.end : MainAxisAlignment.start,
