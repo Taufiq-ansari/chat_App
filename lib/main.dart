@@ -1,8 +1,5 @@
-import 'package:catalog_1/pages/chatpage.dart';
-import 'package:catalog_1/pages/forgotpassword.dart';
 import 'package:catalog_1/pages/home.dart';
 import 'package:catalog_1/pages/sign-in.dart';
-import 'package:catalog_1/pages/sign-up.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

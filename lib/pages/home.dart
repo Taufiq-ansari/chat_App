@@ -4,10 +4,8 @@ import 'package:catalog_1/service/database.dart';
 import 'package:catalog_1/service/shared_pref.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -48,8 +46,6 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   DocumentSnapshot ds = snapshot.data.docs[index];
                   return ChatRoomListTile(
-                    name: ds['receivedUserName'],
-                    profileurl: ds['receivedUserProfile'],
                     chatRoomId: ds.id,
                     lastMessage: ds["lastMessage"],
                     myUsername: myUserName!,
@@ -419,10 +415,8 @@ class _HomePageState extends State<HomePage> {
 }
 
 class ChatRoomListTile extends StatefulWidget {
-  final String lastMessage, name, profileurl, chatRoomId, myUsername, time;
+  final String lastMessage, chatRoomId, myUsername, time;
   ChatRoomListTile({
-    required this.name,
-    required this.profileurl,
     required this.chatRoomId,
     required this.lastMessage,
     required this.myUsername,
@@ -471,26 +465,28 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => SimpleDialog(
-                    clipBehavior: Clip.hardEdge,
-                    children: [Image.network(widget.profileurl)],
+            profilePicUrl == ""
+                ? CircularProgressIndicator()
+                : GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => SimpleDialog(
+                          clipBehavior: Clip.hardEdge,
+                          children: [Image.network(profilePicUrl)],
+                        ),
+                      );
+                    },
+                    child: ClipRRect(
+                      child: Image.network(
+                        profilePicUrl,
+                        height: 60.0,
+                        width: 60.0,
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(60),
+                    ),
                   ),
-                );
-              },
-              child: ClipRRect(
-                child: Image.network(
-                  widget.profileurl,
-                  height: 60.0,
-                  width: 60.0,
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.circular(60),
-              ),
-            ),
             SizedBox(
               width: 20.0,
             ),
@@ -548,6 +544,7 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
                                 .doc(chatRoomId)
                                 .delete();
                             Navigator.pop(context);
+                            print(chatRoomId);
                           },
                           child: Text('Yes'),
                         ),
@@ -575,7 +572,7 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                widget.name,
+                                username,
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 17.0,

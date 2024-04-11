@@ -2,10 +2,7 @@ import 'package:catalog_1/pages/home.dart';
 import 'package:catalog_1/service/database.dart';
 import 'package:catalog_1/service/shared_pref.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:random_string/random_string.dart';
 
@@ -25,7 +22,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   TextEditingController messagecontroller = new TextEditingController();
   String? myUserName, myProfilePic, myName, myEmail, messageId, chatRoomId;
-  Stream<QuerySnapshot<Object?>>? messageStream;
+  Stream? messageStream;
 
   gettheSharedpre() async {
     myUserName = await SharedpreHelper().getUserName();
@@ -60,29 +57,33 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget chatMessageTile(
-      String message, bool sendbyMe, String id, String lastMessage,) {
+    String message,
+    bool sendbyMe,
+    // String id,
+    // String lastMessage,
+  ) {
     return Row(
-      mainAxisAlignment:
-          sendbyMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-      children: [
-        Flexible(
-          child: PopupMenuButton(
+        mainAxisAlignment:
+            sendbyMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+        children: [
+          Flexible(
+            // child: PopupMenuButton(
             // position: PopupMenuPosition.under,
-            offset: Offset(-20, -55),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                child: Text('delete'),
-                onTap: () async {
-                  await DatabaseMethods()
-                      .deleteMessage(chatRoomId: chatRoomId!, docId: id);
-                  Map<String, dynamic> lastMessageInfoMap = {
-                    "lastMessage": lastMessage,
-                  };
-                  DatabaseMethods()
-                      .updateLastMessageSend(chatRoomId!, lastMessageInfoMap);
-                },
-              ),
-            ],
+            // offset: Offset(-20, -55),
+            // itemBuilder: (context) => [
+            // PopupMenuItem(
+            // child: Text('delete'),
+            // onTap: () async {
+            // await DatabaseMethods()
+            //     .deleteMessage(chatRoomId: chatRoomId!, docId: id);
+            // Map<String, dynamic> lastMessageInfoMap = {
+            //   "lastMessage": lastMessage,
+            // };
+            // DatabaseMethods()
+            //     .updateLastMessageSend(chatRoomId!, lastMessageInfoMap);
+            // },
+            // ),
+            // ],
 
             child: Container(
               padding: EdgeInsets.all(16),
@@ -109,16 +110,14 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
             ),
-          ),
-        ),
-      ],
-    );
+          )
+        ]);
   }
 
   Widget chatMessage() {
-    return StreamBuilder<QuerySnapshot<Object?>>(
+    return StreamBuilder(
       stream: messageStream,
-      builder: (context, AsyncSnapshot<QuerySnapshot<Object?>> snapshot) {
+      builder: (context, AsyncSnapshot snapshot) {
         return snapshot.hasData
             ? ListView.builder(
                 padding: EdgeInsets.only(bottom: 10.0, top: 90.0),
@@ -130,14 +129,14 @@ class _ChatPageState extends State<ChatPage> {
                   return chatMessageTile(
                     ds["message"],
                     myUserName == ds["sendBy"],
-                    ds.id,
-                    index == snapshot.data!.docs.length - 1
-                        ? snapshot.data!.docs.length <= 1
-                            ? ''
-                            : snapshot.data?.docs.first['message']
-                        : snapshot.data!.docs.length <= 1
-                            ? ''
-                            : snapshot.data?.docs[1]['message'],
+                    // ds.id,
+                    // index == snapshot.data!.docs.length - 1
+                    //     ? snapshot.data!.docs.length <= 1
+                    //         ? ''
+                    //         : snapshot.data?.docs.first['message']
+                    //     : snapshot.data!.docs.length <= 1
+                    //         ? ''
+                    //         : snapshot.data?.docs[1]['message'],
                   );
                 },
               )
@@ -173,8 +172,8 @@ class _ChatPageState extends State<ChatPage> {
           "lastMessageTs": formattedDate,
           "time": FieldValue.serverTimestamp(),
           "lastMessageSendby": myUserName,
-          "receivedUserName": widget.name,
-          "receivedUserProfile": widget.profileurl,
+          // "receivedUserName": widget.name,
+          // "receivedUserProfile": widget.profileurl,
         };
         DatabaseMethods()
             .updateLastMessageSend(chatRoomId!, lastMessageInfoMap);
@@ -220,7 +219,7 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                     SizedBox(
                       height: 10.0,
-                      width: 150.0,
+                      width: 120.0,
                     ),
                     Text(
                       widget.name,
