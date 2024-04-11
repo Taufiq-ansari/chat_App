@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedpreHelper {
@@ -39,7 +41,17 @@ class SharedpreHelper {
 
   Future<String?> getUserName() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.getString(userNameKey);
+    String? userName = pref.getString(userNameKey);
+    if (userName != null) {
+      return userName;
+    } else {
+      var userData = await FirebaseAuth.instance.currentUser;
+      var d = await FirebaseFirestore.instance
+          .collection('user')
+          .where('Email', isEqualTo: userData!.email)
+          .get();
+      return d.docs[0]['username'];
+    }
   }
 
   Future<String?> getUserEmail() async {

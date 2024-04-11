@@ -166,13 +166,13 @@ class _HomePageState extends State<HomePage> {
                                 border: InputBorder.none,
                                 hintText: "Search",
                                 hintStyle: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               style: TextStyle(
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -288,8 +288,9 @@ class _HomePageState extends State<HomePage> {
               ),
               Expanded(
                 child: Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 20.0,
+                  ),
                   height: search
                       ? MediaQuery.of(context).size.height / 1.19
                       : MediaQuery.of(context).size.height / 1.172,
@@ -493,20 +494,20 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
             Expanded(
               child: GestureDetector(
                 onTap: () async {
-                  String? myUserName = await SharedpreHelper().getUserName();
+                  // String? myUserName = await SharedpreHelper().getUserName();
 
-                  String chatRoomId =
-                      getChatRoomIdbyUsername(myUserName!, username);
-                  Map<String, dynamic> chatRoomInfoMap = <String, dynamic>{
-                    "users": [myUserName, username],
-                  };
-                  await DatabaseMethods()
-                      .creatChatRoom(chatRoomId, chatRoomInfoMap);
+                  // String chatRoomId =
+                  //     getChatRoomIdbyUsername(myUserName!, username);
+                  // Map<String, dynamic> chatRoomInfoMap = <String, dynamic>{
+                  //   "users": [myUserName, username],
+                  // };
+                  // await DatabaseMethods()
+                  //     .creatChatRoom(chatRoomId, chatRoomInfoMap);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ChatPage(
-                        chatroom: chatRoomId,
+                        chatroom: widget.chatRoomId,
                         name: name,
                         profileurl: profilePicUrl,
                         username: username,
