@@ -46,6 +46,7 @@ class _HomePageState extends State<HomePage> {
                 itemBuilder: (context, index) {
                   DocumentSnapshot ds = snapshot.data.docs[index];
                   return ChatRoomListTile(
+                    name: ds.id.toString().split('_').last,
                     chatRoomId: ds.id,
                     lastMessage: ds["lastMessage"],
                     myUsername: myUserName!,
@@ -416,9 +417,14 @@ class _HomePageState extends State<HomePage> {
 }
 
 class ChatRoomListTile extends StatefulWidget {
-  final String lastMessage, chatRoomId, myUsername, time;
+  final String lastMessage;
+  final String chatRoomId;
+  final String myUsername;
+  final String time;
+  final String name;
   ChatRoomListTile({
     required this.chatRoomId,
+    required this.name,
     required this.lastMessage,
     required this.myUsername,
     required this.time,
@@ -573,7 +579,7 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                username,
+                                widget.name,
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 17.0,
